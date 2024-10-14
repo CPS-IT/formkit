@@ -135,6 +135,9 @@ class Get extends AbstractApi
             );
         }
 
+        // @todo: parse schema from form for TYPO3-specific keys (by event handler)
+        // @todo: put form into form cache
+
         return $this->response
             ->setMessage('success')
             ->setStatus(200)

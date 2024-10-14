@@ -39,7 +39,6 @@ class FormFactory
         }
 
         $definition = $this->formRegistry->getFormDefinition($id);
-        // @todo: parse schema for TYPO3-specific keys
         return new Form($id, $definition);
     }
 }
