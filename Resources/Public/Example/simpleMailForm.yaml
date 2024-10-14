@@ -1,0 +1,46 @@
+label: "Simple Mail Form"
+description: "Gathers first name and email."
+schema:
+  - $el: 'h1'
+    children: 'Register'
+  - $formkit: 'text'
+    label: "First Name"
+    name: "firstName"
+    id: 'first-name'
+    prefix-icon: email
+    placeholder: "Enter your first name"
+    required: true
+    helpText: "Please provide your first name."
+    validation: "length:3,150"
+    validationMessages:
+      length: "First name cannot be longer than 150 characters."
+  - $formkit: "email"
+    label: "Email Address"
+    name: "email"
+    id: 'email'
+    placeholder: "Enter your email"
+    required: true
+    helpText: "We'll never share your email with anyone else."
+  - $formkit: 'select'
+    label: 'country'
+    name: 'country'
+    options: []
+  - $typo3: 'select'
+    label: 'country'
+    name: 'country'
+    dataProvider:
+      type: 't3:tca'
+      config: 'foo,bar'
+  - $typo3: 'select'
+    label: 'topic'
+    name: 'topic'
+    dataProvider:
+      type: 'dataAttribute'
+      config: 'data-pid'
+
+  - type: "submit"
+    label: "Submit form"
+    id: "submit"
+    required: true
+    helpText: "Submit the form"
+
