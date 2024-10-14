@@ -32,10 +32,35 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  ***************************************************************/
 class FormRegistry
 {
-    public const CACHE_KEY = 'formkit';
+    public const CACHE_KEY_FORMKIT_DEFINITIONS = 'formkit-definitions';
+    public const CACHE_KEY_FORMKIT_FORMS = 'formkit-forms';
     public const KEY_FILE = 'file';
     public const KEY_SOURCE = 'source';
 
+    public const DEFAULT_CACHE_CONFIGURATIONS = [
+        self::CACHE_KEY_FORMKIT_DEFINITIONS => [
+            'frontend' => VariableFrontend::class,
+            'backend' => RedisBackend::class,
+            'groups' => [
+                'all',
+                'system',
+            ],
+            'options' => [
+                'defaultLifetime' => AbstractBackend::UNLIMITED_LIFETIME,
+            ],
+        ],
+        self::CACHE_KEY_FORMKIT_FORMS => [
+            'frontend' => VariableFrontend::class,
+            'backend' => RedisBackend::class,
+            'groups' => [
+                'all',
+                'system',
+            ],
+            'options' => [
+                'defaultLifetime' => AbstractBackend::UNLIMITED_LIFETIME,
+            ],
+        ]
+    ];
     public const ERROR_INVALID_ID = 'Cannot register form definition with id %s. Id must not be empty';
     protected static array $configuration = [
         'frontend' => VariableFrontend::class,
@@ -71,9 +96,9 @@ class FormRegistry
     {
         try {
             $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-            $cache = $cacheManager->getCache(self::CACHE_KEY);
+            $cache = $cacheManager->getCache(self::CACHE_KEY_FORMKIT_DEFINITIONS);
         } catch (\Exception $e) {
-            $cache = GeneralUtility::makeInstance(NullFrontend::class, self::CACHE_KEY);
+            $cache = GeneralUtility::makeInstance(NullFrontend::class, self::CACHE_KEY_FORMKIT_DEFINITIONS);
         }
 
         return $cache;
@@ -114,7 +139,9 @@ class FormRegistry
 
     public static function addCacheConfiguration(): void
     {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][self::CACHE_KEY] = static::$configuration;
+        foreach (self::DEFAULT_CACHE_CONFIGURATIONS as $id => $configuration) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$id] = $configuration;
+        }
     }
 
     /**
