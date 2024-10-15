@@ -28,8 +28,8 @@ use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
  ***************************************************************/
 class FormRegistry
 {
-    public const CACHE_KEY_FORMKIT_DEFINITIONS = 'formkit-definitions';
-    public const CACHE_KEY_FORMKIT_FORMS = 'formkit-forms';
+    public const CACHE_KEY_FORMKIT_DEFINITIONS = 'formkit_definitions';
+    public const CACHE_KEY_FORMKIT_FORMS = 'formkit_forms';
     public const KEY_FILE = 'file';
     public const KEY_SOURCE = 'source';
 
