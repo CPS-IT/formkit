@@ -31,7 +31,7 @@ class Form implements Serializable
     protected string $id = '';
     protected string $label = '';
     protected array $schema = [];
-    public function __construct(string $id, array $formDefinition)
+    public function __construct(string $id = '', array $formDefinition = [])
     {
         $this->id = $id;
         if(!empty($formDefinition[self::KEY_SCHEMA]) && is_array($formDefinition[self::KEY_SCHEMA])) {

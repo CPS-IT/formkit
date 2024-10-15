@@ -40,7 +40,7 @@ readonly class FormFactory
     public function createFromDefinition(string $id): Form
     {
         if (!$this->formRegistry->hasFormDefinition($id)) {
-            return new NullForm($id, []);
+            return new NullForm();
         }
 
         $definition = $this->formRegistry->getFormDefinition($id);
@@ -49,7 +49,12 @@ readonly class FormFactory
 
     public function createAndParse(string $id, Request $request): Form
     {
-        $definition = $this->createFromDefinition($id)->toArray();
+        $form = $this->createFromDefinition($id);
+        if ($form instanceof NullForm)
+        {
+            return $form;
+        }
+        $definition = $form->toArray();
         foreach (iterator_to_array($this->processors) as $processor) {
             $definition = $processor->process($definition, $request);
         }

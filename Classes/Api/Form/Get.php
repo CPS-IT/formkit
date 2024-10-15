@@ -32,7 +32,7 @@ class Get extends AbstractApi
 
     public function __construct(
         //protected readonly FormRepository $formRepository,
-        protected FormFactory $formFactory,
+        protected FormFactory                $formFactory,
         protected readonly FrontendInterface $cache
     )
     {
@@ -131,10 +131,15 @@ class Get extends AbstractApi
         }
 
         $id = $this->request->getArguments()[static::KEY_ID];
+        $cacheIdentifier = md5(serialize($this->request->getArguments()));
 
-        // @todo lookup cache by $id and request arguments/settings
-        //$form = $this->formRepository->findById($id);
-        $form = $this->formFactory->createAndParse($id, $this->request);
+        if ($this->cache->has($cacheIdentifier)) {
+            $data = $this->cache->get($cacheIdentifier);
+            $form = new Form();
+            $form->unserialize($data);
+        } else {
+            $form = $this->formFactory->createAndParse($id, $this->request);
+        }
         if ($form instanceof NullForm) {
             // Return a `not found` (404) Response
             return $this->response->notFound(
@@ -143,8 +148,7 @@ class Get extends AbstractApi
             );
         }
 
-        // @todo: parse schema from form for TYPO3-specific keys (by event handler)
-        // @todo: put form into form cache
+        $this->cache->set($cacheIdentifier, $form->serialize());
 
         return $this->response
             ->setMessage('success')
@@ -162,12 +166,6 @@ class Get extends AbstractApi
         $id = $this->request->getArguments()[static::KEY_ID] ?? null;
 
         return (bool)$id;
-
-    }
-
-    protected function parseForm(Form $form): Form
-    {
-
 
     }
 }
