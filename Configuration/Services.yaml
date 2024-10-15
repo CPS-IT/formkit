@@ -1,0 +1,32 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  _instanceof:
+    Cpsit\Formkit\Processor\DefinitionProcessorInterface:
+      tags: ['formkit.processor']
+  Cpsit\Formkit\:
+    resource: '../Classes/*'
+
+  cache.formkit-definitions:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['formkit-definitions']
+  cache.formkit-forms:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['formkit-forms']
+  Cpsit\Formkit\Domain\Factory\FormFactory:
+    public: true
+    arguments:
+      $processors: !tagged_iterator {tag: 'formkit.processor', index_by: 'processor'}
+  Cpsit\Formkit\Cache\FormRegistry:
+    public: true
+    arguments:
+      $cache: '@cache.formkit-definitions'
+  Cpsit\Formkit\Api\Form\Get:
+    public: true
+    arguments:
+      $cache: '@cache.formkit-forms'

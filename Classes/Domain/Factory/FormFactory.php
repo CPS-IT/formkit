@@ -5,7 +5,8 @@ namespace Cpsit\Formkit\Domain\Factory;
 use Cpsit\Formkit\Cache\FormRegistry;
 use Cpsit\Formkit\Domain\Model\Form;
 use Cpsit\Formkit\Domain\Model\NullForm;
-use Cpsit\Formkit\Domain\Repository\FormRepository;
+use Nng\Nnrestapi\Mvc\Request;
+use Cpsit\Formkit\Processor\DefinitionProcessorInterface;
 
 /***************************************************************
  *  Copyright notice
@@ -23,22 +24,36 @@ use Cpsit\Formkit\Domain\Repository\FormRepository;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class FormFactory
+readonly class FormFactory
 {
+    /**
+     * @param iterable<DefinitionProcessorInterface> $processors
+     */
     public function __construct(
-        private FormRegistry $formRegistry
+        private FormRegistry $formRegistry,
+        private iterable     $processors
     )
     {
 
     }
 
-    public function createFormFromDefinition(string $id): Form
+    public function createFromDefinition(string $id): Form
     {
-        if ($this->formRegistry->hasFormDefinition($id)) {
+        if (!$this->formRegistry->hasFormDefinition($id)) {
             return new NullForm($id, []);
         }
 
         $definition = $this->formRegistry->getFormDefinition($id);
+        return new Form($id, $definition);
+    }
+
+    public function createAndParse(string $id, Request $request): Form
+    {
+        $definition = $this->createFromDefinition($id)->toArray();
+        foreach (iterator_to_array($this->processors) as $processor) {
+            $definition = $processor->process($definition, $request);
+        }
+
         return new Form($id, $definition);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Cpsit\Formkit\Domain\Repository;
+namespace Cpsit\Formkit\Processor;
 
-use Cpsit\Formkit\Domain\Factory\FormFactory;
-use Cpsit\Formkit\Domain\Model\Form;
+use Nng\Nnrestapi\Mvc\Request;
 
 /***************************************************************
  *  Copyright notice
@@ -21,14 +20,10 @@ use Cpsit\Formkit\Domain\Model\Form;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class FormRepository
+interface DefinitionProcessorInterface
 {
-    public function __construct(protected  FormFactory $formFactory)
-    {
-    }
-    public function findById($id): Form
-    {
-        return $this->formFactory->createFromDefinition($id);
-    }
 
+    public function process($definition, Request $request): array;
+
+    public function canProcess($value, Request $request): bool;
 }

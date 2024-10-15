@@ -6,13 +6,9 @@ use Cpsit\Formkit\Exception\InvalidFormIdException;
 use \JsonException;
 use TYPO3\CMS\Core\Cache\Backend\AbstractBackend;
 use TYPO3\CMS\Core\Cache\Backend\RedisBackend;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Core\Bootstrap;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  *  Copyright notice
@@ -62,17 +58,14 @@ class FormRegistry
         ]
     ];
     public const ERROR_INVALID_ID = 'Cannot register form definition with id %s. Id must not be empty';
-    protected static array $configuration = [
-        'frontend' => VariableFrontend::class,
-        'backend' => RedisBackend::class,
-        'groups' => [
-            'all',
-            'system',
-        ],
-        'options' => [
-            'defaultLifetime' => AbstractBackend::UNLIMITED_LIFETIME,
-        ],
-    ];
+
+
+    public function __construct(
+        private readonly FrontendInterface $cache,
+    )
+    {
+
+    }
 
     /**
      * @throws InvalidFormIdException
@@ -92,21 +85,9 @@ class FormRegistry
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['formkit']['definitionFiles'][$id] = $path;
     }
 
-    protected function getCache(): FrontendInterface
-    {
-        try {
-            $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-            $cache = $cacheManager->getCache(self::CACHE_KEY_FORMKIT_DEFINITIONS);
-        } catch (\Exception $e) {
-            $cache = GeneralUtility::makeInstance(NullFrontend::class, self::CACHE_KEY_FORMKIT_DEFINITIONS);
-        }
-
-        return $cache;
-    }
-
     public function hasFormDefinition(string $id): bool
     {
-        return $this->getCache()->has($id);
+        return self::isRegistered($id);
     }
 
     public function getFormDefinition(string $id): array
@@ -116,14 +97,14 @@ class FormRegistry
         }
 
         try {
-            $cacheEntry = $this->getCache()->get($id);
+            $cacheEntry = $this->cache->get($id);
             if (!$cacheEntry) {
                 $path = self::getDefinitionPath($id);
                 $yamlFileLoader = new YamlFileLoader();
                 $fileContent = $yamlFileLoader->load($path);
                 // @todo: build form by parsing placeholders
                 $cacheEntry = json_encode($fileContent, JSON_THROW_ON_ERROR);
-                $this->getCache()->set(
+                $this->cache->set(
                     $id,
                     $cacheEntry
                 );
@@ -140,7 +121,8 @@ class FormRegistry
     public static function addCacheConfiguration(): void
     {
         foreach (self::DEFAULT_CACHE_CONFIGURATIONS as $id => $configuration) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$id] = $configuration;
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$id] ??= [];
+            //$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$id] = $configuration;
         }
     }
 

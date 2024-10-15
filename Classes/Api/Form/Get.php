@@ -12,10 +12,13 @@ declare(strict_types=1);
 
 namespace Cpsit\Formkit\Api\Form;
 
+use Cpsit\Formkit\Domain\Factory\FormFactory;
+use Cpsit\Formkit\Domain\Model\Form;
 use Cpsit\Formkit\Domain\Model\NullForm;
 use Cpsit\Formkit\Domain\Repository\FormRepository;
 use Nng\Nnrestapi\Annotations as Api;
 use Nng\Nnrestapi\Api\AbstractApi;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\Response;
 
 /**
@@ -27,7 +30,11 @@ class Get extends AbstractApi
 {
     public const KEY_ID = 'id';
 
-    public function __construct(protected readonly FormRepository $formRepository)
+    public function __construct(
+        //protected readonly FormRepository $formRepository,
+        protected FormFactory $formFactory,
+        protected readonly FrontendInterface $cache
+    )
     {
     }
 
@@ -125,13 +132,14 @@ class Get extends AbstractApi
 
         $id = $this->request->getArguments()[static::KEY_ID];
 
-        $form = $this->formRepository->findById($id);
-
+        // @todo lookup cache by $id and request arguments/settings
+        //$form = $this->formRepository->findById($id);
+        $form = $this->formFactory->createAndParse($id, $this->request);
         if ($form instanceof NullForm) {
             // Return a `not found` (404) Response
             return $this->response->notFound(
                 'Form not found',
-                '1728804217',
+                '1728804217'
             );
         }
 
@@ -154,6 +162,12 @@ class Get extends AbstractApi
         $id = $this->request->getArguments()[static::KEY_ID] ?? null;
 
         return (bool)$id;
+
+    }
+
+    protected function parseForm(Form $form): Form
+    {
+
 
     }
 }
