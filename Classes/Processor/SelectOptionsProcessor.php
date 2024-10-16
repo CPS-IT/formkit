@@ -2,9 +2,8 @@
 
 namespace Cpsit\Formkit\Processor;
 
+use Cpsit\Formkit\DataProvider\SelectOptionsDataProviderInterface;
 use Nng\Nnrestapi\Mvc\Request;
-use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 
 /***************************************************************
  *  Copyright notice
@@ -22,30 +21,54 @@ use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class LocalizationProcessor implements DefinitionProcessorInterface
+
+/**
+ * Class SelectOptionsProcessor
+ * Provides options for select fields.
+ * Usage:
+ * ```yaml
+ *   $formkit: 'select*
+ *   options: "%dataProvider(foo-options)%"
+ *   label: 'foo'
+ *   name: 'bar'
+ *   id: 'bar'
+ * ```
+ *
+ */
+class SelectOptionsProcessor implements DefinitionProcessorInterface
 {
-    public const MATCH_PATTERN = '%ll\(.*\)%';
-    public const REPLACE_PATTERN = '%ll\(.*\)%';
-    protected LanguageService $languageService;
+    public const KEY_OPTIONS = 'options';
+    public const MATCH_PATTERN = '%dataProvider\(.*\)%';
+
     public function __construct(
-        private readonly LanguageServiceFactory $languageServiceFactory,
-    ) {
+        private iterable $dataProviders
+    )
+    {
+        $this->dataProviders = iterator_to_array($dataProviders);
 
     }
+
     public function process($definition, Request $request): array
     {
-        $languageService = $this->languageService ?? $this->languageServiceFactory->createFromSiteLanguage(
-            $request->getMvcRequest()->getAttribute('language')
-            ?? $request->getMvcRequest()->getAttribute('site')->getDefaultLanguage());
-        // @todo: get settings, site, language from request
         foreach ($definition as $key => &$value) {
-            if (is_array($value)){
+            if (is_array($value)) {
                 $value = $this->process($value, $request);
             }
-            if ($this->canProcess((string)$key, $value, $request)) {
-                $languageKey = str_replace(['%ll(', ')%'], '', $value);
-                if ($replacement = $languageService->sL($languageKey)) {
-                    $value = $replacement;
+            if (self::KEY_OPTIONS !== $key) {
+                continue;
+            }
+            if ($this->canProcess($key, $value, $request)) {
+                $dataProviderKey = str_replace(['%dataProvider(', ')%'], '', $value);
+
+                foreach ($this->dataProviders as $dataProvider) {
+                    if (!$dataProvider instanceof SelectOptionsDataProviderInterface) {
+                        continue;
+                    }
+                    // first matching data provider wins
+                    if ($dataProvider->getKey() === $dataProviderKey) {
+                        $value = $dataProvider->getOptions();
+                        break;
+                    }
                 }
             }
         }

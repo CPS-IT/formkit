@@ -2,7 +2,7 @@
 
 defined('TYPO3') or die();
 
-use Cpsit\Formkit\Cache\FormRegistry;
+use Cpsit\Formkit\Registry\FormRegistry;
 FormRegistry::addCacheConfiguration();
 /** @noinspection PhpUnhandledExceptionInspection */
 FormRegistry::registerDefinitionFile(

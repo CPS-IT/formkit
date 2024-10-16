@@ -7,6 +7,8 @@ services:
   _instanceof:
     Cpsit\Formkit\Processor\DefinitionProcessorInterface:
       tags: ['formkit.processor']
+    Cpsit\Formkit\DataProvider\SelectOptionsDataProviderInterface:
+      tags: ['formkit.selectOptionsDataProvider']
   Cpsit\Formkit\:
     resource: '../Classes/*'
 
@@ -22,7 +24,11 @@ services:
     public: true
     arguments:
       $processors: !tagged_iterator {tag: 'formkit.processor', index_by: 'processor'}
-  Cpsit\Formkit\Cache\FormRegistry:
+  Cpsit\Formkit\Processor\SelectOptionsProcessor:
+    public: true
+    arguments:
+      $dataProviders: !tagged_iterator {tag: 'formkit.selectOptionsDataProvider', index_by: 'selectOptionsDataProvider'}
+  Cpsit\Formkit\Registry\FormRegistry:
     public: true
     arguments:
       $cache: '@cache.formkit_definitions'

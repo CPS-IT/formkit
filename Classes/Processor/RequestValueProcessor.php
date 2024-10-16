@@ -38,7 +38,7 @@ class RequestValueProcessor implements DefinitionProcessorInterface
             }
         }
         foreach ($definition as $key => &$value) {
-            if ($this->canProcess($value, $request)) {
+            if ($this->canProcess((string)$key, $value, $request)) {
                 $settingsKey = str_replace(['%val(', ')%'], '', $value);
                 if (!ArrayUtility::isValidPath($settings, $settingsKey)) {
                     continue;
@@ -54,7 +54,7 @@ class RequestValueProcessor implements DefinitionProcessorInterface
         return $definition;
     }
 
-    public function canProcess($value, Request $request): bool
+    public function canProcess(string $key, $value, Request $request): bool
     {
         return is_string($value) && preg_match(self::MATCH_PATTERN, $value);
     }

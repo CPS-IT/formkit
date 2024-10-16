@@ -25,5 +25,5 @@ interface DefinitionProcessorInterface
 
     public function process($definition, Request $request): array;
 
-    public function canProcess($value, Request $request): bool;
+    public function canProcess(string $key, $value, Request $request): bool;
 }

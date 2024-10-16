@@ -1,6 +1,6 @@
 <?php
 
-namespace Cpsit\Formkit\Cache;
+namespace Cpsit\Formkit\Registry;
 
 use Cpsit\Formkit\Exception\InvalidFormIdException;
 use \JsonException;

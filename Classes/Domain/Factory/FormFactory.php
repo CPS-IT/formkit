@@ -2,7 +2,7 @@
 
 namespace Cpsit\Formkit\Domain\Factory;
 
-use Cpsit\Formkit\Cache\FormRegistry;
+use Cpsit\Formkit\Registry\FormRegistry;
 use Cpsit\Formkit\Domain\Model\Form;
 use Cpsit\Formkit\Domain\Model\NullForm;
 use Nng\Nnrestapi\Mvc\Request;
