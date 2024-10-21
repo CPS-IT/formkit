@@ -48,84 +48,119 @@ class Get extends AbstractApi
      *
      * ```
      * {
-     *   "schema": [
-     *     {
-     *       "$formkit": "text",
-     *       "label": "First Name",
-     *       "name": "firstName",
-     *       "id": "first-name",
-     *       "prefix-icon": "email"
-     *       "placeholder": "Enter your first name",
-     *       "required": true,
-     *       "helpText": "Please provide your first name.",
-     *       "validation": "length:3,150",
-     *       "validationMessages": {
-     *         "length": "Instructions cannot be more than 120 characters."
-     *       }
-     *     },
-     *     {
-     *       "$formkit": "email",
-     *       "label": "Email Address",
-     *       "name": "email",
-     *       "id": "email",
-     *       "placeholder": "Enter your email",
-     *       "required": true,
-     *       "helpText": "We'll never share your email with anyone else."
-     *     },
-     *     {
-     *       "$formkit": "select",
-     *       "label": "Choose your country",
-     *       "name": "country",
-     *       "id": "country",
-     *       "required": true,
-     *       "options": [
-     *         {
-     *           "label": "United States",
-     *           "value": "us"
-     *         },
-     *         {
-     *           "label": "Canada",
-     *           "value": "ca"
-     *         },
-     *         {
-     *           "label": "Germany",
-     *           "value": "de"
+     *  "data": [
+     *     "schema": [
+     *       {
+     *         "$formkit": "text",
+     *         "label": "First Name",
+     *         "name": "firstName",
+     *         "id": "first-name",
+     *         "prefix-icon": "email"
+     *         "placeholder": "Enter your first name",
+     *         "required": true,
+     *         "help": "Please provide your first name.",
+     *         "validation": "length:3,150",
+     *         "validationMessages": {
+     *           "length": "Instructions cannot be more than 120 characters."
      *         }
+     *       },
+     *       {
+     *         "$formkit": "email",
+     *         "label": "Email Address",
+     *         "name": "email",
+     *         "id": "email",
+     *         "placeholder": "Enter your email",
+     *         "validation": "email",
+     *         "help": "We'll never share your email with anyone else."
+     *       },
+     *       {
+     *         "$formkit": "select",
+     *         "label": "Choose your country",
+     *         "name": "country",
+     *         "id": "country",
+     *         "validation": "required",
+     *         "options": [
+     *           {
+     *             "label": "United States",
+     *             "value": "us"
+     *           },
+     *           {
+     *             "label": "Canada",
+     *             "value": "ca"
+     *           },
+     *           {
+     *             "label": "Germany",
+     *             "value": "de"
+     *           }
+     *         ],
+     *         "help": "Please select your country."
+     *       },
+     *       {
+     *         "$formkit": "checkbox",
+     *         "label": "I agree to the terms and conditions",
+     *         "name": "terms",
+     *         "id": "terms",
+     *         "validation": "required",
+     *         "help": "You must agree before submitting."
+     *       },
+     *       {
+     *         "$formkit": "submit",
+     *         "label": "Submit form",
+     *         "name": "submit",
+     *         "id": "submit",
+     *         "help": "Submit the form"
+     *       }
+     *     ],
+     *     "settings": {
+     *       "states": [
+     *         {
+     *           "status": "new",
+     *           "label": "label status `new`",
+     *           "title": "title status `new`",
+     *           "description": "description status `new`",
+     *         },
+     *         {
+     *           "status": "validated",
+     *           "label": "label status `validated`",
+     *           "title": "title status `validated`",
+     *           "description": "description status `validated`",
+     *         },
+     *         {
+     *           "status": "received",
+     *           "label": "label status `received`",
+     *           "title": "title status `received`",
+     *           "description": "description status `received`",
+     *         },
+     *         {
+     *           "status": "approved",
+     *           "label": "label status `approved`",
+     *           "title": "title status `approved`",
+     *           "description": "description status `approved`",
+     *         },
+     *         {
+     *           "status": "published",
+     *           "label": "label status `published`",
+     *           "title": "title status `published`",
+     *           "description": "description status `published`",
+     *         },
      *       ],
-     *       "helpText": "Please select your country."
      *     },
-     *     {
-     *       "$formkit": "checkbox",
-     *       "label": "I agree to the terms and conditions",
-     *       "name": "terms",
-     *       "id": "terms",
-     *       "required": true,
-     *       "helpText": "You must agree before submitting."
-     *     },
-     *     {
-     *       "$formkit": "submit",
-     *       "label": "Submit form",
-     *       "name": "submit",
-     *       "id": "submit",
-     *       "required": true,
-     *       "helpText": "Submit the form"
-     *     }
-     *   ]
-     * }
+     *   }
      * ```
      *
      * @Api\Route("GET /formkit/form/{id}")
      * @Api\Access("public")
      * @Api\Localize
      * @return Response
+     * @throws \Exception
      */
     public function getIndexAction(): Response
     {
         if (!$this->isRequestValid()) {
             // Return an `invalid parameters` (422) Response
             return $this->response->invalid(
-                'Invalid parameters for form GET.',
-                '1728650710'
+                "Invalid parameters for form GET.",
+                "1728650710"
             );
         }
 
