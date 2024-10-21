@@ -26,16 +26,21 @@ class Form implements Serializable
     public const KEY_ID = 'id';
     public const KEY_LABEL = 'label';
     public const KEY_SCHEMA = 'schema';
+    public const KEY_SETTINGS = 'settings';
 
     protected string $description = '';
     protected string $id = '';
     protected string $label = '';
     protected array $schema = [];
+    protected array $settings = [];
     public function __construct(string $id = '', array $formDefinition = [])
     {
         $this->id = $id;
         if(!empty($formDefinition[self::KEY_SCHEMA]) && is_array($formDefinition[self::KEY_SCHEMA])) {
             $this->schema = $formDefinition[self::KEY_SCHEMA];
+        }
+        if(!empty($formDefinition[self::KEY_SETTINGS]) && is_array($formDefinition[self::KEY_SETTINGS])) {
+            $this->settings = $formDefinition[self::KEY_SETTINGS];
         }
         if(!empty($formDefinition[self::KEY_DESCRIPTION]) && is_string($formDefinition[self::KEY_DESCRIPTION])) {
             $this->description = $formDefinition[self::KEY_DESCRIPTION];
@@ -63,6 +68,7 @@ class Form implements Serializable
             self::KEY_LABEL => $this->label,
             self::KEY_DESCRIPTION => $this->description,
             self::KEY_SCHEMA => $this->schema,
+            self::KEY_SETTINGS => $this->settings,
         ];
     }
 
@@ -72,6 +78,7 @@ class Form implements Serializable
         $this->description = $data[self::KEY_DESCRIPTION] ?? '';
         $this->label = $data[self::KEY_LABEL] ?? '';
         $this->schema = $data[self::KEY_SCHEMA] ?? [];
+        $this->settings = $data[self::KEY_SETTINGS] ?? [];
     }
 
     public function toArray(): array
