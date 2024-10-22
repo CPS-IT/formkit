@@ -1,0 +1,38 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  _instanceof:
+    Cpsit\Formkit\Processor\DefinitionProcessorInterface:
+      tags: ['formkit.processor']
+    Cpsit\Formkit\DataProvider\SelectOptionsDataProviderInterface:
+      tags: ['formkit.selectOptionsDataProvider']
+  Cpsit\Formkit\:
+    resource: '../Classes/*'
+
+  cache.formkit_definitions:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['formkit_definitions']
+  cache.formkit_forms:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['formkit_forms']
+  Cpsit\Formkit\Domain\Factory\FormFactory:
+    public: true
+    arguments:
+      $processors: !tagged_iterator {tag: 'formkit.processor', index_by: 'processor'}
+  Cpsit\Formkit\Processor\SelectOptionsProcessor:
+    public: true
+    arguments:
+      $dataProviders: !tagged_iterator {tag: 'formkit.selectOptionsDataProvider', index_by: 'selectOptionsDataProvider'}
+  Cpsit\Formkit\Registry\FormRegistry:
+    public: true
+    arguments:
+      $cache: '@cache.formkit_definitions'
+  Cpsit\Formkit\Api\Form\Get:
+    public: true
+    arguments:
+      $cache: '@cache.formkit_forms'
