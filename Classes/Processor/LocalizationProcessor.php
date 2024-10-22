@@ -64,12 +64,15 @@ class LocalizationProcessor implements DefinitionProcessorInterface
 
                 if (isset($this->languageFiles[$fileKey])) {
                     $languageFile = $this->languageFiles[$fileKey];
-                    $languageKey = $languageFile . ':' . $languageKey;
+                    $languageReference = $languageFile . ':' . $languageKey;
                 }
             }
 
-            if ($replacement = $languageService->sL($languageKey)) {
+            if ($replacement = $languageService->sL($languageReference)) {
                 $value = $replacement;
+            }
+            if (empty($replacement)) {
+                $value = $languageKey;
             }
 
         }
