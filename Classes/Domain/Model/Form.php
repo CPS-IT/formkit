@@ -27,15 +27,20 @@ class Form implements Serializable
     public const KEY_LABEL = 'label';
     public const KEY_SCHEMA = 'schema';
     public const KEY_SETTINGS = 'settings';
+    public const KEY_LANGUAGE_FILES = 'languageFiles';
 
     protected string $description = '';
     protected string $id = '';
     protected string $label = '';
     protected array $schema = [];
     protected array $settings = [];
+    protected array $languageFiles = [];
     public function __construct(string $id = '', array $formDefinition = [])
     {
         $this->id = $id;
+        if(!empty($formDefinition[self::KEY_LANGUAGE_FILES]) && is_array($formDefinition[self::KEY_LANGUAGE_FILES])) {
+            $this->languageFiles = $formDefinition[self::KEY_LANGUAGE_FILES];
+        }
         if(!empty($formDefinition[self::KEY_SCHEMA]) && is_array($formDefinition[self::KEY_SCHEMA])) {
             $this->schema = $formDefinition[self::KEY_SCHEMA];
         }
@@ -64,8 +69,9 @@ class Form implements Serializable
     public function __serialize(): array
     {
         return [
-            'id' => $this->id,
+            self::KEY_ID => $this->id,
             self::KEY_LABEL => $this->label,
+            self::KEY_LANGUAGE_FILES => $this->languageFiles,
             self::KEY_DESCRIPTION => $this->description,
             self::KEY_SCHEMA => $this->schema,
             self::KEY_SETTINGS => $this->settings,
@@ -77,6 +83,7 @@ class Form implements Serializable
         $this->id = $data[self::KEY_ID] ?? '';
         $this->description = $data[self::KEY_DESCRIPTION] ?? '';
         $this->label = $data[self::KEY_LABEL] ?? '';
+        $this->languageFiles = $data[self::KEY_LANGUAGE_FILES] ?? [];
         $this->schema = $data[self::KEY_SCHEMA] ?? [];
         $this->settings = $data[self::KEY_SETTINGS] ?? [];
     }

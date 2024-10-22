@@ -26,28 +26,52 @@ class LocalizationProcessor implements DefinitionProcessorInterface
 {
     public const MATCH_PATTERN = '%ll\(.*\)%';
     public const REPLACE_PATTERN = '%ll\(.*\)%';
+    public const KEY_LANGUAGE_FILES = 'languageFiles';
     protected LanguageService $languageService;
+    protected $languageFiles = [];
+
     public function __construct(
         private readonly LanguageServiceFactory $languageServiceFactory,
-    ) {
+    )
+    {
 
     }
+
     public function process($definition, Request $request): array
     {
+        if (
+            !empty($definition[self::KEY_LANGUAGE_FILES])
+            && is_array($definition[self::KEY_LANGUAGE_FILES])) {
+            $this->languageFiles = $definition[self::KEY_LANGUAGE_FILES];
+        }
+
         $languageService = $this->languageService ?? $this->languageServiceFactory->createFromSiteLanguage(
             $request->getMvcRequest()->getAttribute('language')
             ?? $request->getMvcRequest()->getAttribute('site')->getDefaultLanguage());
-        // @todo: get settings, site, language from request
+
         foreach ($definition as $key => &$value) {
-            if (is_array($value)){
+            if (is_array($value)) {
                 $value = $this->process($value, $request);
             }
-            if ($this->canProcess((string)$key, $value, $request)) {
-                $languageKey = str_replace(['%ll(', ')%'], '', $value);
-                if ($replacement = $languageService->sL($languageKey)) {
-                    $value = $replacement;
+            if (!$this->canProcess((string)$key, $value, $request)) {
+                continue;
+            }
+
+            $languageKey = str_replace(['%ll(', ')%'], '', $value);
+
+            if (str_contains($languageKey, ':')) {
+                [$fileKey, $languageKey] = explode(':', $languageKey);
+
+                if (isset($this->languageFiles[$fileKey])) {
+                    $languageFile = $this->languageFiles[$fileKey];
+                    $languageKey = $languageFile . ':' . $languageKey;
                 }
             }
+
+            if ($replacement = $languageService->sL($languageKey)) {
+                $value = $replacement;
+            }
+
         }
 
         return $definition;
