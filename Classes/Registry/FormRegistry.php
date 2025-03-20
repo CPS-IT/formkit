@@ -3,7 +3,7 @@
 namespace Cpsit\Formkit\Registry;
 
 use Cpsit\Formkit\Exception\InvalidFormIdException;
-use \JsonException;
+use JsonException;
 use TYPO3\CMS\Core\Cache\Backend\AbstractBackend;
 use TYPO3\CMS\Core\Cache\Backend\RedisBackend;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -55,17 +55,13 @@ class FormRegistry
             'options' => [
                 'defaultLifetime' => AbstractBackend::UNLIMITED_LIFETIME,
             ],
-        ]
+        ],
     ];
     public const ERROR_INVALID_ID = 'Cannot register form definition with id %s. Id must not be empty';
 
-
     public function __construct(
         private readonly FrontendInterface $cache,
-    )
-    {
-
-    }
+    ) {}
 
     /**
      * @throws InvalidFormIdException
@@ -108,7 +104,6 @@ class FormRegistry
                     $id,
                     $cacheEntry
                 );
-
             }
             $definition = json_decode($cacheEntry, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
@@ -139,5 +134,4 @@ class FormRegistry
     {
         return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['formkit']['definitionFiles'][$id] ?? '';
     }
-
 }

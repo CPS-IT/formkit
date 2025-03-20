@@ -31,11 +31,9 @@ class Get extends AbstractApi
 
     public function __construct(
         //protected readonly FormRepository $formRepository,
-        protected FormFactory                $formFactory,
+        protected FormFactory $formFactory,
         protected readonly FrontendInterface $cache
-    )
-    {
-    }
+    ) {}
 
     /**
      * Call via GET-request with an id:
@@ -159,8 +157,8 @@ class Get extends AbstractApi
         if (!$this->isRequestValid()) {
             // Return an `invalid parameters` (422) Response
             return $this->response->invalid(
-                "Invalid parameters for form GET.",
-                "1728650710"
+                'Invalid parameters for form GET.',
+                '1728650710'
             );
         }
 
@@ -190,7 +188,7 @@ class Get extends AbstractApi
             ->setBody([
                 'code' => $this->response->getStatus(),
                 'message' => $this->response->getMessage(),
-                'data' => $form->toArray()
+                'data' => $form->toArray(),
             ])
             ->render();
     }
@@ -200,6 +198,5 @@ class Get extends AbstractApi
         $id = $this->request->getArguments()[static::KEY_ID] ?? null;
 
         return (bool)$id;
-
     }
 }

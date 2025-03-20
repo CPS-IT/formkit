@@ -32,10 +32,7 @@ class LocalizationProcessor implements DefinitionProcessorInterface
 
     public function __construct(
         private readonly LanguageServiceFactory $languageServiceFactory,
-    )
-    {
-
-    }
+    ) {}
 
     public function process($definition, Request $request): array
     {
@@ -47,7 +44,8 @@ class LocalizationProcessor implements DefinitionProcessorInterface
 
         $languageService = $this->languageService ?? $this->languageServiceFactory->createFromSiteLanguage(
             $request->getMvcRequest()->getAttribute('language')
-            ?? $request->getMvcRequest()->getAttribute('site')->getDefaultLanguage());
+            ?? $request->getMvcRequest()->getAttribute('site')->getDefaultLanguage()
+        );
 
         foreach ($definition as $key => &$value) {
             if (is_array($value)) {
@@ -74,7 +72,6 @@ class LocalizationProcessor implements DefinitionProcessorInterface
             if (empty($replacement)) {
                 $value = $languageKey;
             }
-
         }
 
         return $definition;
