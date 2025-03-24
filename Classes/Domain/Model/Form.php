@@ -2,8 +2,6 @@
 
 namespace Cpsit\Formkit\Domain\Model;
 
-use Serializable;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -20,7 +18,7 @@ use Serializable;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class Form implements Serializable
+class Form implements \Serializable
 {
     public const KEY_DESCRIPTION = 'description';
     public const KEY_ID = 'id';

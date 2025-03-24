@@ -3,7 +3,6 @@
 namespace Cpsit\Formkit\Registry;
 
 use Cpsit\Formkit\Exception\InvalidFormIdException;
-use JsonException;
 use TYPO3\CMS\Core\Cache\Backend\AbstractBackend;
 use TYPO3\CMS\Core\Cache\Backend\RedisBackend;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -106,7 +105,7 @@ class FormRegistry
                 );
             }
             $definition = json_decode($cacheEntry, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (\JsonException $exception) {
             $definition = [];
         }
 
