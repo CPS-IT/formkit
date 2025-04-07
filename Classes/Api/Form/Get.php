@@ -30,9 +30,8 @@ class Get extends AbstractApi
     public const KEY_ID = 'id';
 
     public function __construct(
-        //protected readonly FormRepository $formRepository,
-        protected FormFactory $formFactory,
-        protected readonly FrontendInterface $cache
+        private readonly FormFactory $formFactory,
+        private readonly FrontendInterface $cache
     ) {}
 
     /**
