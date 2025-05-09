@@ -1,3 +1,9 @@
+2025-05-09         [RELEASE] Release of formkit 1.0.0 (Vladimir Falcón Piva)
+2025-04-07 1187530 Fixed DI errors with api endpoints and TYPO3 upgrade (Vladimir Falcón Piva)
+2025-03-24 6200b41 Refactor with rector and php-cs. Functionality was not tested. (Vladimir Falcón Piva)
+2025-03-20 ade452f Refactor with rector. Functionality was not tested. (Vladimir Falcón Piva)
+2025-03-19 501a659 Update packages to support TYPO3 v12 and v13 (Vladimir Falcón Piva)
+
 2024-10-22         [RELEASE] Release of formkit 0.1.0 (Dirk Wenzel)
 2024-10-22 4dcb327 LocalizationProcessor now keeps language keys without replacement (Dirk Wenzel)
 2024-10-22 70f0c8a form and LocalizationProcessor extended: multiple language files can now be configured (Dirk Wenzel)
