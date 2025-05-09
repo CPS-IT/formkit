@@ -4,13 +4,14 @@ services:
     autoconfigure: true
     public: false
 
+  Cpsit\Formkit\:
+    resource: '../Classes/*'
+
   _instanceof:
     Cpsit\Formkit\Processor\DefinitionProcessorInterface:
       tags: ['formkit.processor']
     Cpsit\Formkit\DataProvider\SelectOptionsDataProviderInterface:
       tags: ['formkit.selectOptionsDataProvider']
-  Cpsit\Formkit\:
-    resource: '../Classes/*'
 
   cache.formkit_definitions:
     class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -32,6 +33,7 @@ services:
     public: true
     arguments:
       $cache: '@cache.formkit_definitions'
+
   Cpsit\Formkit\Api\Form\Get:
     public: true
     arguments:

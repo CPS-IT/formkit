@@ -33,7 +33,6 @@ use Nng\Nnrestapi\Mvc\Request;
  *   name: 'bar'
  *   id: 'bar'
  * ```
- *
  */
 class SelectOptionsProcessor implements DefinitionProcessorInterface
 {
@@ -42,10 +41,8 @@ class SelectOptionsProcessor implements DefinitionProcessorInterface
 
     public function __construct(
         private iterable $dataProviders
-    )
-    {
+    ) {
         $this->dataProviders = iterator_to_array($dataProviders);
-
     }
 
     public function process($definition, Request $request): array
@@ -54,7 +51,7 @@ class SelectOptionsProcessor implements DefinitionProcessorInterface
             if (is_array($value)) {
                 $value = $this->process($value, $request);
             }
-            if (self::KEY_OPTIONS !== $key) {
+            if ($key !== self::KEY_OPTIONS) {
                 continue;
             }
             if ($this->canProcess($key, $value, $request)) {

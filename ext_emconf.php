@@ -8,12 +8,12 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'coding. powerful. systems. CPS GmbH',
     'author' => 'Dirk Wenzel',
     'author_email' => 'd.wenzel@familie-redlich.de',
-    'version' => '0.1.0',
+    'version' => '1.0.0',
     'constraints' =>
         [
             'depends' =>
                 [
-                    'typo3' => '11.5.99',
+                    'typo3' => '12.4.0-13.4.99',
                 ],
             'conflicts' =>
                 [

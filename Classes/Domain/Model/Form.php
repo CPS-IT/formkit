@@ -2,8 +2,6 @@
 
 namespace Cpsit\Formkit\Domain\Model;
 
-use Serializable;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -20,7 +18,7 @@ use Serializable;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class Form implements Serializable
+class Form implements \Serializable
 {
     public const KEY_DESCRIPTION = 'description';
     public const KEY_ID = 'id';
@@ -38,29 +36,29 @@ class Form implements Serializable
     public function __construct(string $id = '', array $formDefinition = [])
     {
         $this->id = $id;
-        if(!empty($formDefinition[self::KEY_LANGUAGE_FILES]) && is_array($formDefinition[self::KEY_LANGUAGE_FILES])) {
+        if (!empty($formDefinition[self::KEY_LANGUAGE_FILES]) && is_array($formDefinition[self::KEY_LANGUAGE_FILES])) {
             $this->languageFiles = $formDefinition[self::KEY_LANGUAGE_FILES];
         }
-        if(!empty($formDefinition[self::KEY_SCHEMA]) && is_array($formDefinition[self::KEY_SCHEMA])) {
+        if (!empty($formDefinition[self::KEY_SCHEMA]) && is_array($formDefinition[self::KEY_SCHEMA])) {
             $this->schema = $formDefinition[self::KEY_SCHEMA];
         }
-        if(!empty($formDefinition[self::KEY_SETTINGS]) && is_array($formDefinition[self::KEY_SETTINGS])) {
+        if (!empty($formDefinition[self::KEY_SETTINGS]) && is_array($formDefinition[self::KEY_SETTINGS])) {
             $this->settings = $formDefinition[self::KEY_SETTINGS];
         }
-        if(!empty($formDefinition[self::KEY_DESCRIPTION]) && is_string($formDefinition[self::KEY_DESCRIPTION])) {
+        if (!empty($formDefinition[self::KEY_DESCRIPTION]) && is_string($formDefinition[self::KEY_DESCRIPTION])) {
             $this->description = $formDefinition[self::KEY_DESCRIPTION];
         }
-        if(!empty($formDefinition[self::KEY_LABEL]) && is_string($formDefinition[self::KEY_LABEL])) {
+        if (!empty($formDefinition[self::KEY_LABEL]) && is_string($formDefinition[self::KEY_LABEL])) {
             $this->label = $formDefinition[self::KEY_LABEL];
         }
     }
 
-    public function serialize():string
+    public function serialize(): string
     {
         return serialize($this->__serialize());
     }
 
-    public function unserialize(string $data):void
+    public function unserialize(string $data): void
     {
         $data = unserialize($data, ['allowed_classes' => false]);
         $this->__unserialize($data);

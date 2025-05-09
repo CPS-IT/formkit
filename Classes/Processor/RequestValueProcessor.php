@@ -2,7 +2,6 @@
 
 namespace Cpsit\Formkit\Processor;
 
-use Cpsit\Formkit\Processor\DefinitionProcessorInterface;
 use Nng\Nnrestapi\Mvc\Request;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
@@ -24,7 +23,6 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  ***************************************************************/
 class RequestValueProcessor implements DefinitionProcessorInterface
 {
-
     public const MATCH_PATTERN = '%val\(.*\)%';
     public function process($definition, Request $request): array
     {
@@ -45,11 +43,10 @@ class RequestValueProcessor implements DefinitionProcessorInterface
                 }
                 $value = ArrayUtility::getValueByPath($settings, $settingsKey);
             }
-            if (is_array($value)){
+            if (is_array($value)) {
                 $value = $this->process($value, $request);
             }
         }
-
 
         return $definition;
     }

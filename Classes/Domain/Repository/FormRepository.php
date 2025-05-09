@@ -23,12 +23,9 @@ use Cpsit\Formkit\Domain\Model\Form;
  ***************************************************************/
 class FormRepository
 {
-    public function __construct(protected  FormFactory $formFactory)
-    {
-    }
+    public function __construct(protected FormFactory $formFactory) {}
     public function findById($id): Form
     {
         return $this->formFactory->createFromDefinition($id);
     }
-
 }

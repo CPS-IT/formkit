@@ -18,7 +18,4 @@ namespace Cpsit\Formkit\Domain\Model;
  * GNU General Public License for more details.
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-final class NullForm extends Form
-{
-
-}
+final class NullForm extends Form {}
