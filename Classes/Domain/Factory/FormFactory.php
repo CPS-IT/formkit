@@ -2,11 +2,11 @@
 
 namespace Cpsit\Formkit\Domain\Factory;
 
-use Cpsit\Formkit\Registry\FormRegistry;
 use Cpsit\Formkit\Domain\Model\Form;
 use Cpsit\Formkit\Domain\Model\NullForm;
-use Nng\Nnrestapi\Mvc\Request;
 use Cpsit\Formkit\Processor\DefinitionProcessorInterface;
+use Cpsit\Formkit\Registry\FormRegistry;
+use Nng\Nnrestapi\Mvc\Request;
 
 /***************************************************************
  *  Copyright notice
@@ -31,11 +31,8 @@ readonly class FormFactory
      */
     public function __construct(
         private FormRegistry $formRegistry,
-        private iterable     $processors
-    )
-    {
-
-    }
+        private iterable $processors
+    ) {}
 
     public function createFromDefinition(string $id): Form
     {
@@ -50,8 +47,7 @@ readonly class FormFactory
     public function createAndParse(string $id, Request $request): Form
     {
         $form = $this->createFromDefinition($id);
-        if ($form instanceof NullForm)
-        {
+        if ($form instanceof NullForm) {
             return $form;
         }
         $definition = $form->toArray();

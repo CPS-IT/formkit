@@ -23,7 +23,6 @@ namespace Cpsit\Formkit\DataProvider;
  * Interface SelectOptionsDataProviderInterface
  * Provides options data for a select field
  * Implementations must be registered with
- *
  */
 interface SelectOptionsDataProviderInterface
 {
@@ -37,7 +36,7 @@ interface SelectOptionsDataProviderInterface
      *
      * @return string
      */
-    public function getKey():string;
+    public function getKey(): string;
 
     /**
      * Get the options for a given select field.
@@ -54,6 +53,5 @@ interface SelectOptionsDataProviderInterface
      * ]
      * @return array An array of options containing label and value.
      */
-    public function getOptions():array;
-
+    public function getOptions(): array;
 }
