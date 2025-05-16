@@ -162,7 +162,7 @@ class Get extends AbstractApi
         }
 
         $id = $this->request->getArguments()[static::KEY_ID];
-        $cacheIdentifier = md5(serialize($this->request->getArguments()));
+        $cacheIdentifier = md5(serialize($this->request->getArguments()) . $this->languageUid);
 
         if ($this->cache->has($cacheIdentifier)) {
             $data = $this->cache->get($cacheIdentifier);
