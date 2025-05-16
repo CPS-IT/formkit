@@ -1,3 +1,6 @@
+2025-05-16         [RELEASE] Release of formkit 1.0.1 (Vladimir Falcón Piva)
+2025-05-16 9ccf644 Include language UID in cache identifier for improved caching logic (Vladimir Falcón Piva)
+
 2025-05-09         [RELEASE] Release of formkit 1.0.0 (Vladimir Falcón Piva)
 2025-04-07 1187530 Fixed DI errors with api endpoints and TYPO3 upgrade (Vladimir Falcón Piva)
 2025-03-24 6200b41 Refactor with rector and php-cs. Functionality was not tested. (Vladimir Falcón Piva)
