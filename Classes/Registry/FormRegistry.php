@@ -60,6 +60,7 @@ class FormRegistry
 
     public function __construct(
         private readonly FrontendInterface $cache,
+        private readonly YamlFileLoader $yamlFileLoader
     ) {}
 
     /**
@@ -95,8 +96,7 @@ class FormRegistry
             $cacheEntry = $this->cache->get($id);
             if (!$cacheEntry) {
                 $path = self::getDefinitionPath($id);
-                $yamlFileLoader = new YamlFileLoader();
-                $fileContent = $yamlFileLoader->load($path);
+                $fileContent = $this->yamlFileLoader->load($path);
                 // @todo: build form by parsing placeholders
                 $cacheEntry = json_encode($fileContent, JSON_THROW_ON_ERROR);
                 $this->cache->set(
