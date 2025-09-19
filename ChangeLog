@@ -1,3 +1,6 @@
+2025-09-19         [RELEASE] Release of formkit 1.0.2 (Vladimir Falcón Piva)
+2025-09-19 7476438 Refactor FormRegistry to use dependency-injected YamlFileLoader (Vladimir Falcón Piva)
+
 2025-05-16         [RELEASE] Release of formkit 1.0.1 (Vladimir Falcón Piva)
 2025-05-16 9ccf644 Include language UID in cache identifier for improved caching logic (Vladimir Falcón Piva)
 
