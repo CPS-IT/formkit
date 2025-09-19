@@ -8,7 +8,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'coding. powerful. systems. CPS GmbH',
     'author' => 'Dirk Wenzel',
     'author_email' => 'd.wenzel@familie-redlich.de',
-    'version' => '1.0.1',
+    'version' => '1.0.2',
     'constraints' =>
         [
             'depends' =>
